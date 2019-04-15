@@ -6,4 +6,4 @@ COPY . /var/www/html/
 
 RUN docker-php-ext-install sockets
 
-CMD "php Test.php"
+CMD "bash php -v"

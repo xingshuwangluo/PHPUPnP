@@ -1,29 +1,29 @@
 #UPnP by PHP
 
 ## UPnP::routerIPAddress
-ルーターのIPアドレスを取得します。
+取得路由器IP地址
 
 ```
 $upnp = new UPnP();
 echo $upnp->routerIPAddress ();
 ```
 
-上記のように実行すると `192.168.1.1` や `192.168.10.1` など返ってきます。
+执行后会返回一个类似于`192.168.1.1` 或 `192.168.10.1`的地址.
 
 ## UPnP::getExternalIPAddress
 
-現在のIPアドレスを取得します。
+获取现在的IP地址
 
 ```
 $upnp = new UPnP();
 echo $upnp->getExternalIPAddress ();
 ```
 
-上記のように実行すると、取得可能です。
+执行后可能获得
 
 ## UPnP::addPortMapping
 
-ポートマッピングに新しく追加します。
+新增端口映射
 
 ```
 $upnp = new UPnP();
@@ -33,7 +33,7 @@ $upnp->addPortMapping (8080, 8080, '192.168.10.4')
 
 ## UPnP::deletePortMapping
 
-ポートマッピングを削除します。
+删除端口映射
 
 ```
 $upnp = new UPnP();

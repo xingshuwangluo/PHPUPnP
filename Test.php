@@ -5,5 +5,5 @@ require __DIR__ . '/UPnP.php';
 $upnp = new UPnP();
 var_dump($upnp->routerIPAddress ());
 var_dump($upnp->getExternalIPAddress());
-var_dump($upnp->addPortMapping (8080, 8080, '192.168.10.4'));
-var_dump($upnp->deletePortMapping (8080));
+var_dump($upnp->addPortMapping (30045, 30046, $upnp->getExternalIPAddress()));
+var_dump($upnp->deletePortMapping (30045));

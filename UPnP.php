@@ -75,31 +75,37 @@ class UPnP {
 
         socket_sendto($socket, $contents, strlen($contents), 0, '239.255.255.250', '1900');
         socket_recvfrom($socket, $buffer, 1024, 0, $remoteAddr, $remotePort);
-
+       
         if (preg_match('/location\s*:\s*([^\n]+)\n/is', $buffer, $matches)) {
             $router = parse_url(trim($matches[1]));
             $this->_router = $router['host'] . ':' . $router['port'];
             $this->_locationData = file_get_contents(trim($matches[1]));
                     file_put_contents(__DIR__ . '/result.txt', $this->_locationData);
-            if (preg_match_all('/<deviceList>.+<deviceType>([^<]+)<\/deviceType>/is', $this->_locationData, $matches)) {
-                $this->_deviceType = $matches[1];
+            
+            $xml78 = $this->xml2array($this->_locationData);
+           
+            $this->_deviceType = $xml78['device']['deviceType'];
+          
+            $this->_serviceType=[];
+            $this->_controlURL=[];
+            foreach( $xml78['device']['serviceList']['service'] as $service){
+                $this->_serviceType[] = $service['serviceType'];
+                $this->_controlURL[] = $service['controlURL'];
             }
-
-            if (preg_match_all('/<deviceList>.+<serviceType>([^<]+)<\/serviceType>/is', $this->_locationData, $matches)) {
-                $this->_serviceType = $matches[1];
-            }
-
-            if (preg_match_all('/<deviceList>.+<controlURL>([^<]+)<\/controlURL>/is', $this->_locationData, $matches)) {
-                $this->_controlURL = $matches[1];
-            }
-
-            if (preg_match_all('/<deviceList>.+<modelName>([^<]+)<\/modelName>/is', $this->_locationData, $matches)) {
-                $this->_modelName = $matches[1];
-            }
-
+           
+            $this->_modelName = $xml78['device']['modelName'];
+            var_dump($xml78);
             return true;
         }
         return false;
+    }
+
+    public function xml2array($xmls)
+    {
+        $xml =simplexml_load_string($xmls);
+        $xmljson= json_encode($xml);
+        $xml=json_decode($xmljson,true);
+        return $xml;
     }
 
     /**
@@ -125,8 +131,8 @@ class UPnP {
     /**
      * Add Port to UPnP
      *
-     * @param int $externalPort            set external ip address
-     * @param int $internalPort            set transfer ip address
+     * @param int $externalPort            外部端口
+     * @param int $internalPort            内部端口
      * @param string $internalIPAddress    set IP
      * @param string $protocol             set TCP or UDP
      * @param int $timeout                 set timeout
@@ -144,6 +150,7 @@ class UPnP {
             <NewPortMappingDescription>' . $description . '</NewPortMappingDescription>
             <NewLeaseDuration>' . $timeout . '</NewLeaseDuration>
         </m:AddPortMapping>');
+        $xml153 = $this->xml2array($received);
         if (preg_match('/<m:AddPortMappingResponse xmlns:m="' . $this->_serviceType[0] . '">[^<]+<\/m:AddPortMappingResponse>/s', $received)) {
             return true;
         }

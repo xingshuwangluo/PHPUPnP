@@ -88,10 +88,18 @@ class UPnP {
           
             $this->_serviceType=[];
             $this->_controlURL=[];
-            foreach( $xml78['device']['serviceList']['service'] as $service){
-                $this->_serviceType[] = $service['serviceType'];
-                $this->_controlURL[] = $service['controlURL'];
+            if(isset($xml78['device']['serviceList']['service'][0])){
+                foreach( $xml78['device']['serviceList']['service'] as $service){
+                    $this->_serviceType[] = $service['serviceType'];
+                    $this->_controlURL[] = $service['controlURL'];
+                }
+            }else{
+               
+                    $this->_serviceType[] = $$xml78['device']['serviceList']['service']['serviceType'];
+                    $this->_controlURL[] = $$xml78['device']['serviceList']['service']['controlURL'];
+                
             }
+            
            
             $this->_modelName = $xml78['device']['modelName'];
             var_dump($xml78);

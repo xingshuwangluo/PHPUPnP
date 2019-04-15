@@ -158,7 +158,7 @@ class UPnP {
             <NewPortMappingDescription>' . $description . '</NewPortMappingDescription>
             <NewLeaseDuration>' . $timeout . '</NewLeaseDuration>
         </m:AddPortMapping>');
-        
+    
         if (preg_match('/<m:AddPortMappingResponse xmlns:m="' . $this->_serviceType[0] . '">[^<]+<\/m:AddPortMappingResponse>/s', $received)) {
             return true;
         }
@@ -192,7 +192,7 @@ class UPnP {
      * @param  string $content set send contents
      * @return string received server stream
      */
-    private function command ($command, $   ) {
+    private function command ($command, $content) {
         $socket = stream_socket_client('tcp://' . $this->_router);
         $content = '<?xml version="1.0"?>
             <SOAP-ENV:Envelope xmlns:SOAP-ENV:="http://schemas.xmlsoap.org/soap/envelope/" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">

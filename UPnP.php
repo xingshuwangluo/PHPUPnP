@@ -158,7 +158,7 @@ class UPnP {
             <NewPortMappingDescription>' . $description . '</NewPortMappingDescription>
             <NewLeaseDuration>' . $timeout . '</NewLeaseDuration>
         </m:AddPortMapping>');
-    
+        var_dump($received);
         if (preg_match('/<m:AddPortMappingResponse xmlns:m="' . $this->_serviceType[0] . '">[^<]+<\/m:AddPortMappingResponse>/s', $received)) {
             return true;
         }
